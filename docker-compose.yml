@@ -1,0 +1,24 @@
+version: "3.6" # Docker Engine 18.02.0+
+services:
+
+   psql:
+     image: postgres
+     ports:
+       - "8080:5432"
+   
+   book:
+     depends_on:
+       - psql
+     image: xiangyunhuang/rgraphics
+     container_name: rgraphics
+     command: 
+       - /bin/bash
+       - -c
+       - |
+         cp odbc.ini ~/.odbc.ini
+         sh ./_build.sh
+     environment:
+       - DOCKER_HOST_IP
+       - PWD
+     volumes:
+       - ${PWD}:/home/docker/workspace
